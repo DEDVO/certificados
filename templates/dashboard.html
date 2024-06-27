@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <!-- Enlace a Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
+    <!-- Enlace a tu archivo de estilos personalizado -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="display-4">Bienvenido, {{ usuario.persona.nombre }}</h1>
+                <p class="lead">Correo Electrónico: {{ usuario.correo }}</p>
+                <h2>Historial de Empleo</h2>
+                <ul class="list-group mb-3">
+                    {% for historial in usuario.persona.historial_empleo %}
+                        <li class="list-group-item">{{ historial.cargo }}: {{ historial.fecha_ingreso }} - {{ historial.fecha_retiro or 'Presente' }}</li>
+                    {% endfor %}
+                </ul>
+                <a href="/historial_empleo" class="btn btn-primary">Agregar Historial de Empleo</a>
+                <br><br>
+                <a href="/logout" class="btn btn-danger">Cerrar Sesión</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts de Bootstrap y jQuery (opcional) al final del cuerpo del documento -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
