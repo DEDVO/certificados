@@ -34,5 +34,8 @@ class HistorialEmpleo(db.Model):
     fecha_ingreso = db.Column(db.Date, nullable=False)
     fecha_retiro = db.Column(db.Date)
     cargo = db.Column(db.String(100), nullable=False)
+    tipo_contrato = db.Column(db.String(50), nullable=False)
+    salario = db.Column(db.Numeric(10, 2), nullable=False)
+    ciudad = db.Column(db.String(50), nullable=False)
 
     persona = db.relationship('Persona', backref=db.backref('historial_empleo', lazy=True))

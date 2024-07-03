@@ -4,7 +4,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from datetime import datetime
 from fpdf import FPDF
+import locale
 
+locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 app = Flask(__name__, template_folder='templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///base_de_datos.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -40,6 +42,9 @@ class HistorialEmpleo(db.Model):
     fecha_ingreso = db.Column(db.Date, nullable=False)
     fecha_retiro = db.Column(db.Date)
     cargo = db.Column(db.String(100), nullable=False)
+    tipo_contrato = db.Column(db.String(50), nullable=False)  # Añadido el tipo de contrato
+    salario = db.Column(db.Numeric(10, 2), nullable=False)  # Añadido el salario
+    ciudad = db.Column(db.String(50), nullable=False)  # Añadida la ciudad
 
     persona = db.relationship('Persona', backref=db.backref('historial_empleo', lazy=True))
 
@@ -105,9 +110,12 @@ def historial_empleo():
         else:
             fecha_retiro = None
         cargo = request.form['cargo']
+        tipo_contrato = request.form['tipo_contrato']  # Recibe tipo de contrato
+        salario = request.form['salario']  # Recibe salario
+        ciudad = request.form['ciudad']  # Recibe ciudad
         persona_id = session['usuario_id']
 
-        historial = HistorialEmpleo(persona_id=persona_id, fecha_ingreso=fecha_ingreso, fecha_retiro=fecha_retiro, cargo=cargo)
+        historial = HistorialEmpleo(persona_id=persona_id, fecha_ingreso=fecha_ingreso, fecha_retiro=fecha_retiro, cargo=cargo, tipo_contrato=tipo_contrato, salario=salario, ciudad=ciudad)
         db.session.add(historial)
         db.session.commit()
 
@@ -126,28 +134,54 @@ def generar_certificado():
         flash('No se encontró a la persona en la base de datos.', 'error')
         return redirect(url_for('dashboard'))
 
-    filename = f"certificados/{persona.nombre}_{persona.numero_identificacion}.pdf"
+    # Obtén el historial más reciente
     historial = HistorialEmpleo.query.filter_by(persona_id=persona.id).order_by(HistorialEmpleo.fecha_ingreso.desc()).first()
     if not historial:
-        cargo = "Desconocido"
-    else:
-        cargo = historial.cargo
+        flash('No se encontró historial de empleo para la persona.', 'error')
+        return redirect(url_for('dashboard'))
 
-    create_pdf(persona.nombre, persona.numero_identificacion, cargo, filename)
+    filename = f"certificados/{persona.nombre}_{persona.numero_identificacion}.pdf"
+    create_pdf(persona.nombre, persona.numero_identificacion, historial, filename)
     return send_file(filename, as_attachment=True)
 
-def create_pdf(nombre, numero_identificacion, cargo, filename):
+def create_pdf(nombre, numero_identificacion, historial, filename):
     pdf = FPDF()
     pdf.add_page()
 
     pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, txt=f"Certificado para {nombre}", ln=True, align='C')
+
+    # Número de referencia
+    pdf.cell(0, 10, txt="R-DTH-0932-24", ln=True, align='R')
+
+    # Información de la empresa
+    pdf.set_font("Arial", 'B', 14)
+    pdf.cell(0, 10, txt="EMPRESA S.A.S", ln=True, align='C')
+    pdf.set_font("Arial", size=12)
+    pdf.cell(0, 10, txt="NIT 123456789-4", ln=True, align='C')
+    pdf.cell(0, 10, txt="CERTIFICA", ln=True, align='C')
     pdf.ln(10)
-    pdf.cell(200, 10, txt=f"ID: {numero_identificacion}", ln=True, align='C')
-    pdf.ln(10)
-    pdf.cell(200, 10, txt=f"Cargo: {cargo}", ln=True, align='C')
-    pdf.ln(10)
-    pdf.cell(200, 10, txt="Fecha de emisión: 2024", ln=True, align='C')
+
+    # Detalles del certificado
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(0, 10, txt=(
+        f"Que el (la) señor(a) {nombre.upper()}, identificado(a) con la "
+        f"cédula de Ciudadanía No {numero_identificacion}, labora en esta compañía así:\n"
+        f"FECHA DE INGRESO: {historial.fecha_ingreso.strftime('%d DE %B DE %Y').upper()}\n"
+        f"CARGO DESEMPEÑADO: {historial.cargo.upper()}\n\n"
+        f"TIPO DE CONTRATO: {historial.tipo_contrato.upper()}\n\n"
+        f"SALARIO BASICO: $ {historial.salario:,.2f}\n\n"
+        f"CIUDAD: {historial.ciudad.upper()}\n\n"
+        "Se expide la presente certificación a solicitud del interesado(a) en Palmira-Valle del "
+        f"cauca el {datetime.now().strftime('%d')} de {datetime.now().strftime('%B')} del año "
+        f"{datetime.now().strftime('%Y')}.\n\n"
+        "Cordialmente,"
+    ))
+
+    pdf.ln(20)
+    pdf.cell(0, 10, txt="DEIVER ANDRES ORDOSGOITIA VILLADIEGO", ln=True, align='C')
+    pdf.cell(0, 10, txt="Representante legal", ln=True, align='C')
+    pdf.cell(0, 10, txt="NIT: 123456789-4", ln=True, align='C')
+    pdf.cell(0, 10, txt="Tel. (601)1234567 EXT.4103-4101 Cel. 1234567890", ln=True, align='C')
 
     pdf.output(filename)
 

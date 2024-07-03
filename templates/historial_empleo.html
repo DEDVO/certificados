@@ -8,30 +8,41 @@
 </head>
 <body>
     <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title">Agregar Historial de Empleo</h2>
-                        <form method="POST">
-                            <div class="mb-3">
-                                <label for="fecha_ingreso" class="form-label">Fecha de Ingreso</label>
-                                <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="fecha_retiro" class="form-label">Fecha de Retiro (opcional)</label>
-                                <input type="date" class="form-control" id="fecha_retiro" name="fecha_retiro">
-                            </div>
-                            <div class="mb-3">
-                                <label for="cargo" class="form-label">Cargo</label>
-                                <input type="text" class="form-control" id="cargo" name="cargo" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Guardar Historial</button>
-                        </form>
-                    </div>
-                </div>
+        <h2>Agregar Historial de Empleo</h2>
+        <form action="{{ url_for('historial_empleo') }}" method="POST">
+            <div class="mb-3">
+                <label for="fecha_ingreso" class="form-label">Fecha de Ingreso</label>
+                <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso" required>
             </div>
-        </div>
+            <div class="mb-3">
+                <label for="fecha_retiro" class="form-label">Fecha de Retiro</label>
+                <input type="date" class="form-control" id="fecha_retiro" name="fecha_retiro">
+            </div>
+            <div class="mb-3">
+                <label for="cargo" class="form-label">Cargo</label>
+                <input type="text" class="form-control" id="cargo" name="cargo" required>
+            </div>
+            <div class="mb-3">
+                <label for="tipo_contrato" class="form-label">Tipo de Contrato</label>
+                <select class="form-select" id="tipo_contrato" name="tipo_contrato" required>
+                    <option value="" disabled selected>Selecciona...</option>
+                    <option value="Fijo">Fijo</option>
+                    <option value="Temporal">Temporal</option>
+                    <option value="Por horas">Por horas</option>
+                    <option value="Prácticas">Prácticas</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="salario" class="form-label">Salario</label>
+                <input type="number" class="form-control" id="salario" name="salario" required>
+            </div>
+            <div class="mb-3">
+                <label for="ciudad" class="form-label">Ciudad</label>
+                <input type="text" class="form-control" id="ciudad" name="ciudad" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar Historial de Empleo</button>
+        </form>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
