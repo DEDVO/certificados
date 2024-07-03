@@ -144,35 +144,63 @@ def generar_certificado():
     create_pdf(persona.nombre, persona.numero_identificacion, historial, filename)
     return send_file(filename, as_attachment=True)
 
+
+
+
 def create_pdf(nombre, numero_identificacion, historial, filename):
-    pdf = FPDF()
+    class PDF(FPDF):
+        def header(self):
+            # Agregar imagen de encabezado
+            try:
+                self.image('static/img/logo.jpeg', x=10, y=8, w=33)
+            except Exception as e:
+                print(f"Error al cargar la imagen: {e}")
+
+            self.set_font("Arial", size=12)
+
+            # Número de referencia
+            self.cell(0, 10, txt="R-DTH-0932-24", ln=True, align='R')
+
+            # Información de la empresa
+            self.set_font("Arial", 'B', 14)
+            self.cell(0, 10, txt="EMPRESA S.A.S", ln=True, align='C')
+            self.set_font("Arial", size=12)
+            self.cell(0, 10, txt="NIT 123456789-4", ln=True, align='C')
+            self.cell(0, 10, txt="CERTIFICA", ln=True, align='C')
+            self.ln(10)
+
+        def footer(self):
+            # Footer con información de la página
+            self.set_y(-15)
+            self.set_font('Arial', 'I', 8)
+            self.cell(0, 10, txt=f"Página {self.page_no()}", ln=True, align='C')
+
+        def watermark(self):
+            # Agregar marca de agua
+            self.set_text_color(220, 220, 220)  # Color gris claro
+            self.set_font("Arial", size=50)
+            self.text(10, 100, "CONFIDENCIAL")
+
+    # Crear instancia de PDF personalizado
+    pdf = PDF()
     pdf.add_page()
 
-    pdf.set_font("Arial", size=12)
-
-    # Número de referencia
-    pdf.cell(0, 10, txt="R-DTH-0932-24", ln=True, align='R')
-
-    # Información de la empresa
-    pdf.set_font("Arial", 'B', 14)
-    pdf.cell(0, 10, txt="EMPRESA S.A.S", ln=True, align='C')
-    pdf.set_font("Arial", size=12)
-    pdf.cell(0, 10, txt="NIT 123456789-4", ln=True, align='C')
-    pdf.cell(0, 10, txt="CERTIFICA", ln=True, align='C')
-    pdf.ln(10)
+    # Agregar marca de agua
+    pdf.watermark()
 
     # Detalles del certificado
+    pdf.set_text_color(0, 0, 0)  # Restaurar color negro para el texto normal
     pdf.set_font("Arial", size=12)
     pdf.multi_cell(0, 10, txt=(
         f"Que el (la) señor(a) {nombre.upper()}, identificado(a) con la "
-        f"cédula de Ciudadanía No {numero_identificacion}, labora en esta compañía así:\n"
+        f"cédula de Ciudadanía No {numero_identificacion}, labora en esta compañía así:\n\n"
         f"FECHA DE INGRESO: {historial.fecha_ingreso.strftime('%d DE %B DE %Y').upper()}\n"
-        f"CARGO DESEMPEÑADO: {historial.cargo.upper()}\n\n"
-        f"TIPO DE CONTRATO: {historial.tipo_contrato.upper()}\n\n"
-        f"SALARIO BASICO: $ {historial.salario:,.2f}\n\n"
-        f"CIUDAD: {historial.ciudad.upper()}\n\n"
-        "Se expide la presente certificación a solicitud del interesado(a) en Palmira-Valle del "
-        f"cauca el {datetime.now().strftime('%d')} de {datetime.now().strftime('%B')} del año "
+        f"CARGO DESEMPEÑADO: {historial.cargo.upper()}\n"
+        f"TIPO DE CONTRATO: {historial.tipo_contrato.upper()}\n"
+        f"SALARIO BASICO: $ {historial.salario:,.2f}\n"
+        f"CIUDAD: {historial.ciudad.upper()}\n"
+        "Se expide la presente certificación a solicitud del interesado(a) en la ciudad de "
+        f"Bogota D.C el {datetime.now().strftime('%d')} de {datetime.now().strftime('%B')} del año "
         f"{datetime.now().strftime('%Y')}.\n\n"
         "Cordialmente,"
     ))
@@ -183,7 +211,10 @@ def create_pdf(nombre, numero_identificacion, historial, filename):
     pdf.cell(0, 10, txt="NIT: 123456789-4", ln=True, align='C')
     pdf.cell(0, 10, txt="Tel. (601)1234567 EXT.4103-4101 Cel. 1234567890", ln=True, align='C')
 
+    # Guardar el archivo PDF
     pdf.output(filename)
+
+
 
 if __name__ == '__main__':
     if not os.path.exists('certificados'):
