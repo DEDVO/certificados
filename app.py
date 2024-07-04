@@ -178,8 +178,9 @@ def create_pdf(nombre, numero_identificacion, historial, filename):
         def watermark(self):
             # Agregar marca de agua
             self.set_text_color(220, 220, 220)  # Color gris claro
-            self.set_font("Arial", size=50)
-            self.text(10, 100, "CONFIDENCIAL")
+            #self.set_font("Arial", size=50)
+            #self.text(10, 100, "CONFIDENCIAL")
+            self.image('static/img/logo.jpeg', x=70, y=120, w=100, h=100)
 
     # Crear instancia de PDF personalizado
     pdf = PDF()
@@ -194,11 +195,12 @@ def create_pdf(nombre, numero_identificacion, historial, filename):
     pdf.multi_cell(0, 10, txt=(
         f"Que el (la) señor(a) {nombre.upper()}, identificado(a) con la "
         f"cédula de Ciudadanía No {numero_identificacion}, labora en esta compañía así:\n\n"
-        f"FECHA DE INGRESO: {historial.fecha_ingreso.strftime('%d DE %B DE %Y').upper()}\n"
-        f"CARGO DESEMPEÑADO: {historial.cargo.upper()}\n"
-        f"TIPO DE CONTRATO: {historial.tipo_contrato.upper()}\n"
-        f"SALARIO BASICO: $ {historial.salario:,.2f}\n"
-        f"CIUDAD: {historial.ciudad.upper()}\n"
+        f"FECHA DE INGRESO: \t\t\t\t\t\t {historial.fecha_ingreso.strftime('%d DE %B DE %Y').upper()}\n"
+        f"CARGO DESEMPEÑADO: \t\t\t\t\t\t{historial.cargo.upper()}\n"
+        f"TIPO DE CONTRATO:\t\t\t\t\t\t {historial.tipo_contrato.upper()}\n"
+        f"SALARIO BASICO:  \t\t\t\t\t\t $-_"
+        f"{historial.salario:,.2f}\n"
+        f"CIUDAD: \t\t\t\t\t\t{historial.ciudad.upper()}\n"
         "Se expide la presente certificación a solicitud del interesado(a) en la ciudad de "
         f"Bogota D.C el {datetime.now().strftime('%d')} de {datetime.now().strftime('%B')} del año "
         f"{datetime.now().strftime('%Y')}.\n\n"
