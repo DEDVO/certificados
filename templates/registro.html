@@ -1,35 +1,51 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Define el conjunto de caracteres del documento -->
     <meta charset="UTF-8">
+    <!-- Define la configuración de la ventana gráfica para que el sitio web sea compatible con dispositivos móviles -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título del documento, se muestra en la pestaña del navegador -->
     <title>Registro de Usuario</title>
+    <!-- Enlace al archivo CSS de Bootstrap para estilizar la página -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
+    <!-- Contenedor principal con margen superior -->
     <div class="container mt-5">
+        <!-- Fila para centrar el contenido horizontalmente -->
         <div class="row justify-content-center">
+            <!-- Columna de tamaño medio para el formulario, centrada en la página -->
             <div class="col-md-6">
+                <!-- Caja que contiene el formulario -->
                 <div class="card">
+                    <!-- Cuerpo de la tarjeta donde se encuentra el contenido principal -->
                     <div class="card-body">
+                        <!-- Título del formulario -->
                         <h2 class="card-title">Registro de Usuario</h2>
+                        <!-- Formulario para el registro de usuarios, el método POST envía los datos al servidor -->
                         <form method="POST">
+                            <!-- Campo de entrada para el nombre -->
                             <div class="mb-3">
                                 <label for="nombre" class="form-label">Nombre</label>
                                 <input type="text" class="form-control" id="nombre" name="nombre" required>
                             </div>
+                            <!-- Campo de entrada para el número de identificación -->
                             <div class="mb-3">
                                 <label for="numero_identificacion" class="form-label">Número de Identificación</label>
                                 <input type="text" class="form-control" id="numero_identificacion" name="numero_identificacion" required>
                             </div>
+                            <!-- Campo de entrada para el correo electrónico -->
                             <div class="mb-3">
                                 <label for="correo" class="form-label">Correo Electrónico</label>
                                 <input type="email" class="form-control" id="correo" name="correo" required>
                             </div>
+                            <!-- Campo de entrada para la contraseña -->
                             <div class="mb-3">
                                 <label for="contrasena" class="form-label">Contraseña</label>
                                 <input type="password" class="form-control" id="contrasena" name="contrasena" required>
                             </div>
+                            <!-- Botón para enviar el formulario -->
                             <button type="submit" class="btn btn-primary">Registrarse</button>
                         </form>
                     </div>
@@ -38,6 +54,7 @@
         </div>
     </div>
 
+    <!-- Enlace al archivo JavaScript de Bootstrap para la funcionalidad de la página -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

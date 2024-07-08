@@ -1,31 +1,43 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Configuración básica del documento -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título de la página -->
     <title>Historial de Empleo</title>
+    <!-- Enlace al archivo CSS de Bootstrap para estilos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
+    <!-- Contenedor principal con margen superior -->
     <div class="container mt-5">
+        <!-- Título para agregar historial de empleo -->
         <h2>Agregar Historial de Empleo</h2>
+        <!-- Formulario para enviar datos del historial de empleo -->
         <form action="{{ url_for('historial_empleo') }}" method="POST">
+            <!-- Campo para la fecha de ingreso -->
             <div class="mb-3">
                 <label for="fecha_ingreso" class="form-label">Fecha de Ingreso</label>
                 <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso" required>
             </div>
+            <!-- Campo opcional para la fecha de retiro -->
             <div class="mb-3">
                 <label for="fecha_retiro" class="form-label">Fecha de Retiro</label>
                 <input type="date" class="form-control" id="fecha_retiro" name="fecha_retiro">
             </div>
+            <!-- Campo para el cargo -->
             <div class="mb-3">
                 <label for="cargo" class="form-label">Cargo</label>
                 <input type="text" class="form-control" id="cargo" name="cargo" required>
             </div>
+            <!-- Selector para el tipo de contrato -->
             <div class="mb-3">
                 <label for="tipo_contrato" class="form-label">Tipo de Contrato</label>
                 <select class="form-select" id="tipo_contrato" name="tipo_contrato" required>
+                    <!-- Opción inicial deshabilitada -->
                     <option value="" disabled selected>Selecciona...</option>
+                    <!-- Opciones para diferentes tipos de contrato -->
                     <option value="Fijo">Fijo</option>
                     <option value="Temporal">Temporal</option>
                     <option value="Por horas">Por horas</option>
@@ -33,18 +45,45 @@
                     <option value="Otro">Otro</option>
                 </select>
             </div>
+            <!-- Campo para el salario -->
             <div class="mb-3">
                 <label for="salario" class="form-label">Salario</label>
                 <input type="number" class="form-control" id="salario" name="salario" required>
             </div>
+            <!-- Campo para la ciudad -->
             <div class="mb-3">
                 <label for="ciudad" class="form-label">Ciudad</label>
                 <input type="text" class="form-control" id="ciudad" name="ciudad" required>
             </div>
+            <!-- Botón para enviar el formulario -->
             <button type="submit" class="btn btn-primary">Agregar Historial de Empleo</button>
         </form>
+
+        <!-- Título para mostrar el historial de empleo -->
+        <h2 class="mt-5">Historial de Empleo</h2>
+        <!-- Lista para mostrar cada elemento del historial de empleo -->
+        <ul class="list-group">
+            <!-- Ciclo para iterar sobre cada item del historial -->
+            {% for item in historial %}
+            <!-- Elemento de la lista que muestra detalles del empleo y formulario para generar PDF -->
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <!-- Muestra el cargo y las fechas de ingreso y retiro si existen -->
+                {{ item.cargo }} ({{ item.fecha_ingreso.strftime('%d/%m/%Y') }} - {{ item.fecha_retiro.strftime('%d/%m/%Y') if item.fecha_retiro else "Presente" }})
+                <!-- Formulario para generar un PDF -->
+                <form action="{{ url_for('generar_pdf') }}" method="POST" style="display:inline;">
+                    <!-- Campo oculto para enviar el ID del historial de empleo -->
+                    <input type="hidden" name="id" value="{{ item.id }}">
+                    <!-- Botón para enviar el formulario -->
+                    <button type="submit" class="btn btn-primary btn-sm">Imprimir</button>
+                </form>
+            </li>
+            <!-- Finaliza el ciclo -->
+            {% endfor %}
+        </ul>
     </div>
 
+    <!-- Enlace al archivo JavaScript de Bootstrap para funcionalidad adicional -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
