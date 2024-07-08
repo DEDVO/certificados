@@ -1,55 +1,44 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- Define el conjunto de caracteres del documento -->
     <meta charset="UTF-8">
-    <!-- Define la configuración de la ventana gráfica para que el sitio web sea compatible con dispositivos móviles -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Título del documento, se muestra en la pestaña del navegador -->
     <title>Dashboard</title>
-    <!-- Enlace al archivo CSS de Bootstrap para estilizar la página -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
-    <!-- Contenedor principal con margen superior -->
     <div class="container mt-5">
-        <!-- Título principal de la página -->
-        <h2>Dashboard</h2>
-        <!-- Alerta de Bootstrap para mostrar un mensaje -->
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Dashboard</h2>
+            <form action="{{ url_for('cerrar_sesion') }}" method="POST">
+                <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+            </form>
+        </div>
         <div class="alert alert-primary" role="alert">
-            <!-- Muestra el nombre del usuario utilizando la plantilla de Flask -->
+            <!-- Muestra el nombre del usuario -->
             Bienvenido, {{ persona.nombre }}!
         </div>
-        <!-- Fila para organizar el contenido en dos columnas -->
         <div class="row">
-            <!-- Columna para el formulario de agregar historial de empleo -->
+            <!-- Formulario para agregar historial de empleo -->
             <div class="col-md-6">
-                <!-- Título para la sección de agregar historial de empleo -->
                 <h3>Agregar Historial de Empleo</h3>
-                <!-- Formulario que envía datos al servidor usando el método POST -->
                 <form action="{{ url_for('agregar_historial_empleo') }}" method="POST">
-                    <!-- Campo de entrada para la fecha de ingreso -->
                     <div class="mb-3">
                         <label for="fecha_ingreso" class="form-label">Fecha de Ingreso</label>
                         <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso" required>
                     </div>
-                    <!-- Campo de entrada para la fecha de retiro -->
                     <div class="mb-3">
                         <label for="fecha_retiro" class="form-label">Fecha de Retiro</label>
                         <input type="date" class="form-control" id="fecha_retiro" name="fecha_retiro">
                     </div>
-                    <!-- Campo de entrada para el cargo -->
                     <div class="mb-3">
                         <label for="cargo" class="form-label">Cargo</label>
                         <input type="text" class="form-control" id="cargo" name="cargo" required>
                     </div>
-                    <!-- Campo de selección para el tipo de contrato -->
                     <div class="mb-3">
                         <label for="tipo_contrato" class="form-label">Tipo de Contrato</label>
                         <select class="form-select" id="tipo_contrato" name="tipo_contrato" required>
-                            <!-- Opción inicial deshabilitada -->
                             <option value="" disabled selected>Selecciona...</option>
-                            <!-- Opciones para diferentes tipos de contrato -->
                             <option value="Fijo">Fijo</option>
                             <option value="Temporal">Temporal</option>
                             <option value="Por horas">Por horas</option>
@@ -57,49 +46,36 @@
                             <option value="Otro">Otro</option>
                         </select>
                     </div>
-                    <!-- Campo de entrada para el salario -->
                     <div class="mb-3">
                         <label for="salario" class="form-label">Salario</label>
                         <input type="number" class="form-control" id="salario" name="salario" required>
                     </div>
-                    <!-- Campo de entrada para la ciudad -->
                     <div class="mb-3">
                         <label for="ciudad" class="form-label">Ciudad</label>
                         <input type="text" class="form-control" id="ciudad" name="ciudad" required>
                     </div>
-                    <!-- Botón para enviar el formulario -->
                     <button type="submit" class="btn btn-primary">Agregar Historial de Empleo</button>
                 </form>
             </div>
 
-            <!-- Columna para mostrar el historial de empleo del usuario -->
+            <!-- Lista de historial de empleo -->
             <div class="col-md-6">
-                <!-- Título para la sección de historial de empleo -->
                 <h3>Historial de Empleo</h3>
-                <!-- Lista desordenada para mostrar cada elemento del historial de empleo -->
                 <ul class="list-group">
-                    <!-- Ciclo para iterar sobre cada elemento del historial de empleo del usuario -->
                     {% for item in usuario.persona.historial_empleo %}
-                    <!-- Elemento de la lista que muestra detalles del empleo y un formulario para generar un certificado -->
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <!-- Muestra el cargo y las fechas de ingreso y retiro si existen -->
                         {{ item.cargo }} ({{ item.fecha_ingreso.strftime('%d/%m/%Y') }} - {{ item.fecha_retiro.strftime('%d/%m/%Y') if item.fecha_retiro else "Presente" }})
-                        <!-- Formulario para generar un certificado -->
                         <form action="{{ url_for('generar_certificado') }}" method="POST" style="display:inline;">
-                            <!-- Campo oculto para enviar el ID del historial de empleo -->
                             <input type="hidden" name="id_historial" value="{{ item.id }}">
-                            <!-- Botón para enviar el formulario -->
                             <button type="submit" class="btn btn-primary btn-sm">Imprimir</button>
                         </form>
                     </li>
-                    <!-- Finaliza el ciclo -->
                     {% endfor %}
                 </ul>
             </div>
         </div>
     </div>
 
-    <!-- Enlace al archivo JavaScript de Bootstrap para la funcionalidad de la página -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

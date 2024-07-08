@@ -76,6 +76,12 @@ class HistorialEmpleo(db.Model):
 def index():
     return render_template('index.html')
 
+#Cerrar Sesion
+@app.route('/cerrar_sesion', methods=['POST'])
+def cerrar_sesion():
+    session.pop('usuario_id', None)
+    return redirect(url_for('login'))
+
 # Ruta para el registro de usuarios
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
