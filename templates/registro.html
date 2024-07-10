@@ -28,12 +28,12 @@
                             <!-- Campo de entrada para el nombre -->
                             <div class="mb-3">
                                 <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                <input type="text" class="form-control" id="nombre" name="nombre" required pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" title="El nombre debe contener solo letras, espacios y puede incluir acentos.">
                             </div>
                             <!-- Campo de entrada para el número de identificación -->
                             <div class="mb-3">
                                 <label for="numero_identificacion" class="form-label">Número de Identificación</label>
-                                <input type="text" class="form-control" id="numero_identificacion" name="numero_identificacion" required>
+                                <input type="text" class="form-control" id="numero_identificacion" name="numero_identificacion" required pattern="^\d{8,10}$" title="El número de documento debe tener entre 8 y 10 dígitos y contener solo números.">
                             </div>
                             <!-- Campo de entrada para el correo electrónico -->
                             <div class="mb-3">
@@ -43,7 +43,15 @@
                             <!-- Campo de entrada para la contraseña -->
                             <div class="mb-3">
                                 <label for="contrasena" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" id="contrasena" name="contrasena" required>
+                                <input type="password" class="form-control" id="contrasena" name="contrasena" requiredpattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?\:{}|><]).{9,}" title="La contraseña debe tener más de 8 caracteres, incluir al menos una mayúscula, un número y un símbolo especial.">
+                             <!-- Lista de requisitos para la contraseña que se muestra debajo del campo -->
+                             <ul class="password-requirements">
+                                <li>Al menos 9 caracteres de longitud</li>
+                                <li>Al menos una letra mayúscula (A-Z)</li>
+                                <li>Al menos una letra minúscula (a-z)</li>
+                                <li>Al menos un número (0-9)</li>
+                                <li>Al menos un símbolo especial (ej. !@#$%^&*)</li>
+                            </ul>
                             </div>
                             <!-- Botón para enviar el formulario -->
                             <button type="submit" class="btn btn-primary">Registrarse</button>

@@ -6,6 +6,7 @@ import os
 from datetime import datetime
 from fpdf import FPDF
 import locale
+import re
 
 # Configuración de la localización para el formato de fecha en español
 locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
@@ -91,6 +92,18 @@ def registro():
         numero_identificacion = request.form['numero_identificacion']
         correo = request.form['correo']
         contrasena = request.form['contrasena']
+
+        # Validaciones
+        nombre_valido = re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', nombre) is not None
+        password_valido = (len(contrasena) > 8 and 
+                           re.search(r'[A-Z]', contrasena) and 
+                           re.search(r'[\d]', contrasena) and 
+                           re.search(r'[!@#$%^&*(),.?":{}|<>]', contrasena))
+        numero_valido = re.match(r'^\d{8,10}$', numero_identificacion) is not None
+
+        # Si hay errores, no procesar el formulario y regresar a la misma página
+        if not (nombre_valido and password_valido and numero_valido):
+            return redirect(url_for('registro'))
 
         # Crear y agregar una nueva persona a la base de datos
         persona = Persona(nombre=nombre, numero_identificacion=numero_identificacion)
