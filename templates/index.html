@@ -3,30 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido al portal de certificados </title>
+    <title>Bienvenido al portal de certificados</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .banner {
+            display: flex;
+            justify-content: center;  /* Centra horizontalmente */
+            align-items: center;      /* Centra verticalmente si es necesario */
+            margin-top: 20px;         /* Añade un poco de margen arriba */
+        }
+        img {
+            max-width: 100%;          /* Hace que la imagen sea responsive */
+            height: auto;             /* Mantiene la proporción de la imagen */
+        }
+    </style>
 </head>
 
 <body>
-    <img src="https://www.uamerica.edu.co/wp-content/images_Museo/images/logo-universitaria-de-colombia.png" alt="Logo">
+    <div class="banner">
+        <img src="https://www.uamerica.edu.co/wp-content/images_Museo/images/logo-universitaria-de-colombia.png" alt="banner" width="820" height="360">
+    </div>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h2 class="card-title">Portal de consultas para certificados</h2>
+                        <h2 class="card-title">CENTRO DE SOLICITUDES PARA CERTIFICADOS</h2>
+                         <img src="/static/img-1.webp" alt="Logo" width="600" height="500">
+                         <p></p>
                         <form action="/login" method="GET">
-                        <button type="submit">Iniciar sesión</button>
-                    </form>
-                    <p></p>
-                    <form action="/registro" method="GET">
-                        <button type="submit">Registrarse</button>
-                    </form>
+                            <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                        </form>
+                        <p></p>
+                        <form action="/registro" method="GET">
+                            <button type="submit" class="btn btn-primary">Registrarse</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
