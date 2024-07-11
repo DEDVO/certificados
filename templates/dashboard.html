@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .bordes {
+            border: 2px solid #007bff; /* Un azul similar al azul primario de Bootstrap */
+            border-radius: 15px; /* Bordes redondeados */
+            padding: 20px; /* Espaciado interno para que el contenido no toque los bordes */
+            margin-bottom: 20px; /* Espacio debajo del contenedor */
+        }
+    </style>
+    
 </head>
 <body>
     <div class="container mt-5">
@@ -17,10 +26,12 @@
         <div class="alert alert-primary" role="alert">
             <!-- Muestra el nombre del usuario -->
             Bienvenido, {{ persona.nombre }}!
-        </div>
-        <div class="row">
+        </div >
+        <div class="row" >
             <!-- Formulario para agregar historial de empleo -->
             <div class="col-md-6">
+                <!--Clase adicional para añadir bordes-->
+                <div class="bordes">
                 <h3>Agregar Historial de Empleo</h3>
                 <form action="{{ url_for('agregar_historial_empleo') }}" method="POST">
                     <div class="mb-3">
@@ -57,9 +68,12 @@
                     <button type="submit" class="btn btn-primary">Agregar Historial de Empleo</button>
                 </form>
             </div>
+        </div>
 
             <!-- Lista de historial de empleo -->
             <div class="col-md-6">
+                <!--Clase adicional para añadir bordes-->
+                <div class="bordes">
                 <h3>Historial de Empleo</h3>
                 <ul class="list-group">
                     {% for item in usuario.persona.historial_empleo %}
@@ -75,7 +89,9 @@
             </div>
         </div>
     </div>
+</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
