@@ -18,6 +18,7 @@ app = Flask(__name__, template_folder='templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///base_de_datos.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+
 # Clave secreta para la gestión de sesiones y mensajes flash
 app.config['SECRET_KEY'] = 'tu_clave_secreta'
 
