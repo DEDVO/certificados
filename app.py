@@ -93,6 +93,12 @@ def registro():
         correo = request.form['correo']
         contrasena = request.form['contrasena']
 
+        usuario_existente = Usuario.query.filter_by(correo=correo).first()
+
+        if usuario_existente:
+            flash('El correo electrónico ya está registrado.', 'error')
+            return redirect(url_for('registro'))
+
         # Validaciones
         nombre_valido = re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', nombre) is not None
         password_valido = (len(contrasena) > 8 and 
